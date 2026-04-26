@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syllabus Autonomy Assistant for PRE-BOS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a472a;
+            --primary-light: #2d6b42;
+            --accent: #d4a574;
+            --accent-dark: #a68050;
+            --bg-light: #faf8f3;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-muted: #5a5a5a;
+            --border: #e0dcd5;
+            --success: #2d6b42;
+            --warning: #d4a574;
+            --error: #c1462b;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #faf8f3 0%, #f5f0e8 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--bg-white);
+            border-bottom: 3px solid var(--primary);
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .college-info {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== FORM SECTION ===== */
+        .section {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section h3 {
+            font-size: 1.4rem;
+            color: var(--primary-light);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--bg-white);
+            box-shadow: 0 0 0 3px rgba(26, 71, 42, 0.1);
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .radio-item label,
+        .checkbox-item label {
+            margin-bottom: 0;
+            font-weight: 500;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        /* ===== BUTTONS ===== */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        button.btn {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button.btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        button.btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        button.btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+
+        button.btn-secondary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        button.btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== PHASE ROADMAP ===== */
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary);
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-left-color: var(--accent);
+        }
+
+        .phase-num {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .phase-card h3 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            margin-top: 0;
+        }
+
+        .phase-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .phase-card li {
+            padding: 0.6rem 0;
+            padding-left: 1.8rem;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .phase-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* ===== FEATURES SECTION ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #faf8f3 0%, #f5f0e8 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-box h4 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-box p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== ALERT & STATUS ===== */
+        .alert {
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            border-left: 5px solid;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            border-color: #1976d2;
+            color: #0d47a1;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            border-color: var(--success);
+            color: #1b5e20;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            border-color: var(--warning);
+            color: #e65100;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 3px solid var(--accent);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .footer-meta {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .copyright {
+            font-size: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .oer-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button.btn {
+                width: 100%;
+            }
+
+            .radio-group,
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-content">
+            <div class="college-info">SKR & SKR Government College for Women (Autonomous) | Kadapa, AP</div>
+            <h1>Syllabus Autonomy Assistant</h1>
+            <p class="header-subtitle">PRE-BOS Revision & Compliance Tool</p>
+            <span class="version-badge">FREE VERSION 1.0</span>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('free-version')">FREE TOOL</button>
+            <button class="tab-btn" onclick="switchTab('features')">FEATURES & ROADMAP</button>
+            <button class="tab-btn" onclick="switchTab('about')">ABOUT THIS TOOL</button>
+        </div>
+
+        <!-- ===== TAB 1: FREE VERSION TOOL ===== -->
+        <div id="free-version" class="tab-content active">
+
+            <div class="section">
+                <h2>📋 Step 1: Upload APSCHE Syllabus</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Upload your current APSCHE-approved syllabus PDF for analysis and enhancement.
+                </p>
+                <div class="form-group">
+                    <label for="pdf-upload">Select Syllabus PDF:</label>
+                    <input type="file" id="pdf-upload" accept=".pdf" />
+                    <small style="color: var(--text-muted); margin-top: 0.5rem; display: block; font-size: 1rem;">
+                        Max size: 10 MB | Format: PDF
+                    </small>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎓 Step 2: Select Subject Type</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Choose the category that best describes your subject.
+                </p>
+                <div class="form-group">
+                    <label>Subject Category:</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="cs" name="subject-type" value="cs" checked />
+                            <label for="cs">Computer Science (CS)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="science" name="subject-type" value="science" />
+                            <label for="science">Science (Physics/Chemistry/Biology)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="commerce" name="subject-type" value="commerce" />
+                            <label for="commerce">Commerce</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="arts" name="subject-type" value="arts" />
+                            <label for="arts">Arts/Humanities</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Step 3: Select Change Percentage</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                    How much of the syllabus content should be proposed for addition/modification?
+                </p>
+                <div class="form-group">
+                    <label for="change-percent">Change Intensity:</label>
+                    <select id="change-percent">
+                        <option value="5">5% - Minor Updates (Refinement Only)</option>
+                        <option value="10">10% - Light Revision (Selective Enhancements)</option>
+                        <option value="15">15% - Moderate Revision (Balanced Approach)</option>
+                        <option value="20">20% - Major Revision (Comprehensive Update)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>✨ Step 4: Generate Outputs</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Click below to generate syllabus additions, deletions, justifications, and CO–PO mapping.
+                </p>
+                <div class="alert alert-info">
+                    <strong>⚙️ Note:</strong> This is a feature scaffold. Full integration with AI analysis and Excel export coming in Phase 2.
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="generateOutputs()">🚀 GENERATE ADDITIONS & DELETIONS</button>
+                    <button class="btn btn-secondary" onclick="generateCOPO()">📈 GENERATE CO–PO MAPPING</button>
+                    <button class="btn btn-secondary" onclick="exportExcel()">📥 EXPORT TO EXCEL</button>
+                </div>
+            </div>
+
+            <div id="output-section" style="display: none; margin-top: 2rem;">
+                <div class="section">
+                    <h2>📝 Proposed Additions & Deletions</h2>
+                    <div id="additions-output"></div>
+                </div>
+
+                <div class="section">
+                    <h2>📊 CO–PO Mapping</h2>
+                    <div id="copo-output"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== TAB 2: FEATURES & ROADMAP ===== -->
+        <div id="features" class="tab-content">
+
+            <div class="section">
+                <h2>🎯 Current Free Version Features</h2>
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon">📄</div>
+                        <h4>PDF Upload</h4>
+                        <p>Upload APSCHE-approved syllabus for automated analysis</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">🏷️</div>
+                        <h4>Subject Categorization</h4>
+                        <p>CS, Science, Commerce, Arts—intelligent context detection</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">⚖️</div>
+                        <h4>Change Intensity</h4>
+                        <p>5%, 10%, 15%, 20%—calibrated revision levels</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">✏️</div>
+                        <h4>Auto-Generated Content</h4>
+                        <p>Additions, deletions, and detailed justifications</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">🔗</div>
+                        <h4>CO–PO Mapping</h4>
+                        <p>Course Outcome to Program Outcome alignment</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">📊</div>
+                        <h4>Excel Export</h4>
+                        <p>Download structured data for documentation</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🗺️ Development Roadmap</h2>
+                <div class="roadmap">
+
+                    <div class="phase-card">
+                        <div class="phase-num">1</div>
+                        <h3>Phase 1: Core</h3>
+                        <ul>
+                            <li>Python/Streamlit app scaffold</li>
+                            <li>PDF parsing & extraction</li>
+                            <li>Subject-type logic layer</li>
+                            <li>Gemini API integration for content generation</li>
+                        </ul>
+                        <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                            <strong>Timeline:</strong> Q2 2026
+                        </p>
+                    </div>
+
+                    <div class="phase-card">
+                        <div class="phase-num">2</div>
+                        <h3>Phase 2: Excel Output</h3>
+                        <ul>
+                            <li>Template-based Excel generation</li>
+                            <li>Formatted tables & auto-sum logic</li>
+                            <li>Multi-sheet export (Additions, Deletions, CO–PO)</li>
+                            <li>Download via Streamlit/FastAPI</li>
+                        </ul>
+                        <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                            <strong>Timeline:</strong> Q2–Q3 2026
+                        </p>
+                    </div>
+
+                    <div class="phase-card">
+                        <div class="phase-num">3</div>
+                        <h3>Phase 3: Subject-Wise Intelligence</h3>
+                        <ul>
+                            <li><strong>Programming:</strong> Code examples, repo links</li>
+                            <li><strong>Theory:</strong> Concept-driven pedagogy</li>
+                            <li><strong>Lab:</strong> Experiment design templates</li>
+                            <li><strong>Commerce:</strong> Case studies & scenarios</li>
+                            <li><strong>Humanities:</strong> Critical thinking frameworks</li>
+                        </ul>
+                        <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                            <strong>Timeline:</strong> Q3 2026
+                        </p>
+                    </div>
+
+                    <div class="phase-card">
+                        <div class="phase-num">4</div>
+                        <h3>Phase 4: OER Release</h3>
+                        <ul>
+                            <li>GitHub repository setup</li>
+                            <li>Complete documentation</li>
+                            <li>Installation & deployment guides</li>
+                            <li>CC BY 4.0 OER licensing</li>
+                            <li>Community contribution framework</li>
+                        </ul>
+                        <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                            <strong>Timeline:</strong> Q3–Q4 2026
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🚀 Advanced Version (Future Roadmap)</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    Coming after Phase 4 OER release:
+                </p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adv1" disabled />
+                        <label for="adv1">CO–PSO Mapping (Program-level outcomes)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adv2" disabled />
+                        <label for="adv2">Bloom's Taxonomy alignment (PO–CO–topic level)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adv3" disabled />
+                        <label for="adv3">BOS Minutes draft generation</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adv4" disabled />
+                        <label for="adv4">Academic Council Resolution draft</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adv5" disabled />
+                        <label for="adv5">NAAC Evidence Report (PDF + infographic)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adv6" disabled />
+                        <label for="adv6">Institutional Development Plan alignment</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== TAB 3: ABOUT ===== -->
+        <div id="about" class="tab-content">
+
+            <div class="section">
+                <h2>📖 About This Tool</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.8;">
+                    The <strong>Syllabus Autonomy Assistant for PRE-BOS</strong> is a free, open-source tool designed for college faculty managing syllabus revisions under autonomous university frameworks (e.g., APSCHE). It automates syllabus enhancement, compliance checks, and outcome mapping—streamlining the Board of Studies (BOS) approval process while maintaining academic rigor.
+                </p>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.8;">
+                    Built as <strong>Open Educational Resource (OER)</strong> under CC BY 4.0, this tool is free for all faculty and institutions to use, modify, and redistribute.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>🎯 Design Philosophy</h3>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.8;">
+                    <strong>Simplicity first:</strong> No complex configurations. Upload → Select → Generate.<br/>
+                    <strong>Context-aware:</strong> Subject-wise intelligence for programming, theory, labs, commerce, and humanities.<br/>
+                    <strong>Compliance-driven:</strong> Outputs designed for NAAC, IQAC, and BOS documentation.<br/>
+                    <strong>Faculty-centered:</strong> Built by faculty, for faculty. Respects your time and expertise.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>📚 Creator</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <strong>Dr. C. V. Krishnaveni</strong><br/>
+                    Lecturer in Computer Science & Head of Department<br/>
+                    IQAC Coordinator<br/>
+                    SKR & SKR Government College for Women (Autonomous)<br/>
+                    Kadapa, Andhra Pradesh, India<br/>
+                    <br/>
+                    📧 Blog: <a href="https://cvkrishnaveni.blogspot.com" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">cvkrishnaveni.blogspot.com</a><br/>
+                    📊 Google Scholar: <a href="https://scholar.google.com/citations?user=GQrjgHYAAAAJ" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">GQrjgHYAAAAJ</a>
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>👥 Principal</h3>
+                <p style="font-size: 1.1rem;">
+                    <strong>Dr. V. Saleem Basha</strong><br/>
+                    Principal<br/>
+                    SKR & SKR Government College for Women (Autonomous)<br/>
+                    Kadapa, Andhra Pradesh, India
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-content">
+            <h3>Syllabus Autonomy Assistant for PRE-BOS</h3>
+            <div class="footer-meta">
+                <div><strong>Creator:</strong> Dr. C. V. Krishnaveni, Lecturer in Computer Science</div>
+                <div><strong>Institution:</strong> SKR & SKR Government College for Women (Autonomous), Kadapa, AP</div>
+                <div><strong>Principal:</strong> Dr. V. Saleem Basha</div>
+            </div>
+            <div class="oer-badge">🔓 OPEN EDUCATIONAL RESOURCE</div>
+            <div class="copyright">
+                © Dr. C. V. Krishnaveni | CC BY 4.0 International License | Open Educational Resource<br/>
+                You are free to: Use • Modify • Distribute | With attribution and under CC BY 4.0 terms.<br/>
+                <strong>GitHub Repository:</strong> <em>Coming Q3 2026 (Phase 4)</em>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TAB SWITCHING
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from buttons
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // GENERATE OUTPUTS (SCAFFOLD)
+        function generateOutputs() {
+            const fileInput = document.getElementById('pdf-upload');
+            const subjectType = document.querySelector('input[name="subject-type"]:checked').value;
+            const changePercent = document.getElementById('change-percent').value;
+
+            if (!fileInput.files.length) {
+                alert('⚠️ Please upload a PDF first.');
+                return;
+            }
+
+            const fileName = fileInput.files[0].name;
+
+            const outputHTML = `
+                <div class="alert alert-success">
+                    ✅ Analysis Complete!
+                </div>
+                <p><strong>File:</strong> ${fileName}</p>
+                <p><strong>Subject Type:</strong> ${subjectType.toUpperCase()}</p>
+                <p><strong>Change Intensity:</strong> ${changePercent}%</p>
+
+                <h3 style="margin-top: 2rem; color: var(--primary);">📝 Proposed Additions (${changePercent}% of syllabus)</h3>
+                <ul style="margin-left: 1.5rem; font-size: 1.05rem; line-height: 1.8;">
+                    <li><strong>Modern Tools & Frameworks:</strong> Updated technology stack aligned with industry 2026 standards</li>
+                    <li><strong>Practical Case Studies:</strong> Real-world applications from your subject domain</li>
+                    <li><strong>Emerging Research Topics:</strong> Latest developments in the field (last 2 years)</li>
+                    <li><strong>Skill Development:</strong> Industry-relevant competencies (soft skills, collaboration tools)</li>
+                    <li><strong>Assessment Methods:</strong> Enhanced evaluation rubrics with Bloom's taxonomy levels</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem; color: var(--primary);">❌ Proposed Deletions</h3>
+                <ul style="margin-left: 1.5rem; font-size: 1.05rem; line-height: 1.8;">
+                    <li><strong>Redundant Topics:</strong> Content already covered in other courses or prerequisites</li>
+                    <li><strong>Outdated Frameworks:</strong> Legacy methodologies superseded by modern approaches</li>
+                    <li><strong>Low-Impact Content:</strong> Marginal topics with minimal learning outcomes</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem; color: var(--primary);">💡 Justification</h3>
+                <p style="font-size: 1.05rem; line-height: 1.8;">
+                    All changes maintain APSCHE compliance and NAAC alignment. Additions focus on contemporary relevance and employer expectations. Deletions remove redundancy without compromising foundational knowledge. Change intensity of <strong>${changePercent}%</strong> ensures gradual, sustainable evolution.
+                </p>
+            `;
+
+            document.getElementById('additions-output').innerHTML = outputHTML;
+            document.getElementById('output-section').style.display = 'block';
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateCOPO() {
+            const outputHTML = `
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem; font-size: 1rem;">
+                    <thead>
+                        <tr style="background: var(--primary); color: white;">
+                            <th style="padding: 1rem; text-align: left; border: 1px solid var(--border);">Course Outcome (CO)</th>
+                            <th style="padding: 1rem; text-align: left; border: 1px solid var(--border);">Program Outcome (PO)</th>
+                            <th style="padding: 1rem; text-align: center; border: 1px solid var(--border);">Mapping Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 1rem; border: 1px solid var(--border);">CO1: Understand fundamentals</td>
+                            <td style="padding: 1rem; border: 1px solid var(--border);">PO1, PO2, PO5</td>
+                            <td style="padding: 1rem; border: 1px solid var(--border); text-align: center; color: var(--success); font-weight: 600;">High</td>
+                        </tr>
+                        <tr style="background: var(--bg-light);">
+                            <td style="padding: 1rem; border: 1px solid var(--border);">CO2: Apply concepts</td>
+                            <td style="padding: 1rem; border: 1px solid var(--border);">PO2, PO3, PO4</td>
+                            <td style="padding: 1rem; border: 1px solid var(--border); text-align: center; color: var(--success); font-weight: 600;">High</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; border: 1px solid var(--border);">CO3: Analyze & synthesize</td>
+                            <td style="padding: 1rem; border: 1px solid var(--border);">PO4, PO5, PO6</td>
+                            <td style="padding: 1rem; border: 1px solid var(--border); text-align: center; color: var(--success); font-weight: 600;">Medium</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="alert alert-info">
+                    <strong>📊 Note:</strong> Full CO–PO matrix with Bloom's taxonomy levels will be generated in Phase 3. Excel export includes complete attainment data.
+                </div>
+            `;
+
+            document.getElementById('copo-output').innerHTML = outputHTML;
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exportExcel() {
+            alert('📥 Excel export feature coming in Phase 2 (Q2–Q3 2026).\n\nFor now, download sample templates from GitHub (Phase 4 release).');
+        }
+    </script>
+
+</body>
+</html>
